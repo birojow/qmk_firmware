@@ -24,29 +24,28 @@ enum {
     COMM_LTEQ,
     DOT_GTEQ,
     EQUAL_EQEQEQ,
-    BR_SLSH_QMARK,
-    QUOT_DQUOT_NUBS
+    BR_SLSH_QMARK
 };
 
 td_state_t cur_dance(tap_dance_state_t *state);
 
-// tap = 1! double tap = != hold = !==
+// Tap: KC_1 / Double tap: != / Hold: !==
 void one_excl_finished(tap_dance_state_t *state, void *user_data);
 void one_excl_reset(tap_dance_state_t *state, void *user_data);
 
-// tap = ,< hold = <=
+// Tap: KC_COMM, Hold: <=
 void comm_lteq_finished(tap_dance_state_t *state, void *user_data);
 void comm_lteq_reset(tap_dance_state_t *state, void *user_data);
 
-// tap = .> hold = >=
+// Tap: KC_DOT, Hold: >=
 void dot_gteq_finished(tap_dance_state_t *state, void *user_data);
 void dot_gteq_reset(tap_dance_state_t *state, void *user_data);
 
-// tap = =+ hold = ===
+// Tap: KC_EQUAL, Hold: ===
 void equal_eqeqeq_finished(tap_dance_state_t *state, void *user_data);
 void equal_eqeqeq_reset(tap_dance_state_t *state, void *user_data);
 
-// tap = /? hold = ?.let {
+// Tap: BR_SLSH, Double tap: ?: / Hold: ?.let {
 void br_slsh_qmark_finished(tap_dance_state_t *state, void *user_data);
 void br_slsh_qmark_reset(tap_dance_state_t *state, void *user_data);
 
@@ -88,7 +87,7 @@ td_state_t cur_dance(tap_dance_state_t *state) {
     }
 }
 
-// 1! / != / !==
+// Tap: KC_1 / Double tap: != / Hold: !==
 static td_tap_t one_excl_state = {
     .is_press_action = true,
     .state = TD_NONE
@@ -98,11 +97,7 @@ void one_excl_finished(tap_dance_state_t *state, void *user_data) {
     one_excl_state.state = cur_dance(state);
     switch (one_excl_state.state) {
         case TD_SINGLE_TAP:
-            if (get_mods() & MOD_MASK_SHIFT) {
-                tap_code16(KC_EXLM);
-            } else {
-                tap_code(KC_1);
-            }
+            tap_code(KC_1);
             break;
         case TD_SINGLE_HOLD:
             send_string("!==");
@@ -119,13 +114,12 @@ void one_excl_reset(tap_dance_state_t *state, void *user_data) {
     one_excl_state.state = TD_NONE;
 }
 
-// ,< / <=
+// Tap: KC_COMM, Hold: <=
 static td_tap_t comm_lteq_state = {
     .is_press_action = true,
     .state = TD_NONE
 };
 
-// Tap: KC_COMM, Hold: <=
 void comm_lteq_finished(tap_dance_state_t *state, void *user_data) {
     comm_lteq_state.state = cur_dance(state);
     switch (comm_lteq_state.state) {
@@ -144,13 +138,12 @@ void comm_lteq_reset(tap_dance_state_t *state, void *user_data) {
     comm_lteq_state.state = TD_NONE;
 }
 
-// .> / >=
+// Tap: KC_DOT, Hold: >=
 static td_tap_t dot_gteq_state = {
     .is_press_action = true,
     .state = TD_NONE
 };
 
-// Tap: KC_DOT, Hold: >=
 void dot_gteq_finished(tap_dance_state_t *state, void *user_data) {
     dot_gteq_state.state = cur_dance(state);
     switch (dot_gteq_state.state) {
@@ -169,13 +162,12 @@ void dot_gteq_reset(tap_dance_state_t *state, void *user_data) {
     dot_gteq_state.state = TD_NONE;
 }
 
-// = / ===
+// Tap: KC_EQUAL, Hold: ===
 static td_tap_t equal_eqeqeq_state = {
     .is_press_action = true,
     .state = TD_NONE
 };
 
-// Tap: KC_EQUAL, Hold: ===
 void equal_eqeqeq_finished(tap_dance_state_t *state, void *user_data) {
     equal_eqeqeq_state.state = cur_dance(state);
     switch (equal_eqeqeq_state.state) {
@@ -194,13 +186,12 @@ void equal_eqeqeq_reset(tap_dance_state_t *state, void *user_data) {
     equal_eqeqeq_state.state = TD_NONE;
 }
 
-// /? / ?.let {
+// Tap: BR_SLSH, Double tap: ?: / Hold: ?.let {
     static td_tap_t br_slsh_qmark_state = {
         .is_press_action = true,
         .state = TD_NONE
     };
 
-// Tap: BR_SLSH, Hold: ?.let {
 void br_slsh_qmark_finished(tap_dance_state_t *state, void *user_data) {
     br_slsh_qmark_state.state = cur_dance(state);
     switch (br_slsh_qmark_state.state) {
